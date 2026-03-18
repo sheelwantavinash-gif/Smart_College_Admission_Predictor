@@ -2,26 +2,46 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Admission Predictor", page_icon="🎓", layout="centered")
 
-def set_background():
-    st.markdown(
-        """
-        <style>
-        .stApp {
-            background-image: url("https://images.unsplash.com/photo-1523240795612-9a054b0db644");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                url("https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
 
-set_background()
+.main-container {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0px 8px 32px rgba(0,0,0,0.3);
+}
+
+h1, h2, h3, p, label {
+    color: white !important;
+}
+
+.stButton>button {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+}
+
+.stButton>button:hover {
+    transform: scale(1.05);
+    transition: 0.2s;
+}
+</style>
+""", unsafe_allow_html=True)
 
 @st.cache_resource
 def load_model():
@@ -29,8 +49,10 @@ def load_model():
 
 model = load_model()
 
-st.title("🎓 Admission Predictor")
-st.markdown("Enter your academic details to estimate your admission chances.")
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
+st.title("🎓 Smart Admission Predictor")
+st.markdown("### Predict your chances instantly")
 
 st.divider()
 
@@ -48,9 +70,11 @@ research_value = 1 if research == "Yes" else 0
 
 st.divider()
 
-if st.button("Predict Admission Chance"):
+if st.button("🚀 Predict"):
     input_data = np.array([[gre_score, toefl_score, cgpa, research_value]])
     prediction = model.predict(input_data)[0]
+
+    st.subheader("Result")
 
     if prediction > 0.7:
         st.success(f"High Chance ({prediction:.2f})")
@@ -61,14 +85,6 @@ if st.button("Predict Admission Chance"):
 
     st.progress(float(prediction))
 
-    data = pd.DataFrame({
-        "Feature": ["GRE", "TOEFL", "CGPA", "Research"],
-        "Value": [gre_score, toefl_score, cgpa, research_value]
-    })
+st.markdown("</div>", unsafe_allow_html=True)
 
-    fig, ax = plt.subplots()
-    ax.bar(data["Feature"], data["Value"])
-    st.pyplot(fig)
-
-st.markdown("---")
-st.markdown("Developed by Avinash Sheelwant")
+st.markdown("<p style='text-align:center; color:white;'>Made by Avinash Sheelwant 🚀</p>", unsafe_allow_html=True)
