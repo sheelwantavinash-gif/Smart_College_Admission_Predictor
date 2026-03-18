@@ -3,8 +3,9 @@ import pickle
 import pandas as pd
 
 # Load the AI Brain
-with open(r"C:\Users\Avinash Sheelwant\admission_model.pkl","rb") as file:
-    model = pickle.load(file)
+import joblib
+
+model = joblib.load("admission_model.pkl")
 
 # Build the Website UI
 st.set_page_config(page_title="Admission Predictor", page_icon="🎓")
